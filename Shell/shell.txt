@@ -1,0 +1,246 @@
+(http://www.runoob.com/linux/linux-shell.html)
+1 Shell 环境
+	1.1 Linux的Shell种类众多，常见的有：
+		Bourne Shell（/usr/bin/sh或/bin/sh）
+		Bourne Again Shell（/bin/bash）
+		C Shell（/usr/bin/csh）
+		K Shell（/usr/bin/ksh）
+		Shell for Root（/sbin/sh）
+	1.2 "#!" 是一个约定的标记，它告诉系统这个脚本需要什么解释器来执行，即使用哪一种Shell。
+	1.3	运行Shell脚本有两种方法：
+		1.3.1 作为可执行程序
+				chmod +x ./test.sh  #使脚本具有执行权限
+				./test.sh  #执行脚本
+		1.3.2 作为解释器参数
+				/bin/sh test.sh
+2 Shell 变量
+	2.1 变量名的命名须遵循如下规则：
+			首个字符必须为字母（a-z，A-Z）。
+			中间不能有空格，可以使用下划线（_）。
+			不能使用标点符号。
+			不能使用bash里的关键字（可用help命令查看保留关键字）。
+	2.2 使用变量
+		使用一个定义过的变量，只要在变量名前面加美元符号即可.
+		变量名外面的花括号是可选的,加花括号是为了帮助解释器识别变量的边界.
+		已定义的变量，可以被重新定义，
+		使用 readonly 命令可以将变量定义为只读变量，只读变量的值不能被改变。
+		使用 unset 命令可以删除变量。: unset variable_name
+	2.3 变量类型:
+		1) 局部变量 局部变量在脚本或命令中定义，仅在当前shell实例中有效，其他shell启动的程序不能访问局部变量。
+		2) 环境变量 所有的程序，包括shell启动的程序，都能访问环境变量，有些程序需要环境变量来保证其正常运行。必要的时候shell脚本也可以定义环境变量。
+		3) shell变量 shell变量是由shell程序设置的特殊变量。shell变量中有一部分是环境变量，有一部分是局部变量，这些变量保证了shell的正常运行
+	2.4 Shell 字符串
+		2.4.1 单引号:
+				单引号里的任何字符都会原样输出，单引号字符串中的变量是无效的；
+				单引号字串中不能出现单引号（对单引号使用转义符后也不行）。
+		2.4.2 双引号
+				双引号里可以有变量
+				双引号里可以出现转义字符
+		2.4.3 拼接字符串
+				your_name="qinjx"
+				greeting="hello, "$your_name" !"
+				greeting_1="hello, ${your_name} !"
+				echo $greeting $greeting_1
+		2.4.4 获取字符串长度
+				string="abcd"
+				echo ${#string} #输出 4	
+		2.4.5 提取子字符串
+				string="runoob is a great site"
+				echo ${string:1:4} # 输出 unoo
+	2.5 Shell 数组
+		2.5.1 定义数组:在Shell中，用括号来表示数组，数组元素用"空格"或换行符号分割开。定义数组的一般形式为：数组名=(值1 值2 ... 值n)
+		2.5.2 读取数组元素值的一般格式是：${数组名[下标]}
+				使用@符号可以获取数组中的所有元素，例如：echo ${array_name[@]}
+				获取数组长度的方法与获取字符串长度的方法相同，例如：
+					# 取得数组元素的个数
+					length=${#array_name[@]}
+					# 或者
+					length=${#array_name[*]}
+					# 取得数组单个元素的长度
+					lengthn=${#array_name[n]}
+					$* 与 $@ 区别：
+						相同点：都是引用所有参数。
+						不同点：只有在双引号中体现出来。假设在脚本运行时写了三个参数 1、2、3，，则 " * " 等价于 "1 2 3"（传递了一个参数），而 "@" 等价于 "1" "2" "3"（传递了三个参数）。
+	2.6 Shell 注释：以"#"开头的行就是注释，会被解释器忽略。sh里没有多行注释。
+3 Shell 传递参数
+	3.1 执行 Shell 脚本时，向脚本传递参数，脚本内获取参数的格式为：$n。
+			n 代表一个数字， $0 为执行的文件名，第一个参数为：$1，第二个参数为：$2 ...
+	3.2 特殊字符:
+			$#	传递到脚本的参数个数
+			$*	以一个单字符串显示所有向脚本传递的参数。如"$*"用「"」括起来的情况、以"$1 $2 … $n"的形式输出所有参数。
+			$$	脚本运行的当前进程ID号
+			$!	后台运行的最后一个进程的ID号
+			$@	与$*相同，但是使用时加引号，并在引号中返回每个参数。如"$@"用「"」括起来的情况、以"$1" "$2" … "$n" 的形式输出所有参数。
+			$-	显示Shell使用的当前选项，与set命令功能相同。
+			$?	显示最后命令的退出状态。0表示没有错误，其他任何值表明有错误。
+4 Shell 基本运算符
+	4.1 原生bash不支持简单的数学运算，通过其他命令来实现，例如 awk 和 expr，expr 最常用。
+		expr 是一款表达式计算工具，使用它能完成表达式的求值操作。
+		例如，两个数相加(注意使用的是反引号 ` ,表达式和运算符之间要有空格)：val=`expr 2 + 2` 
+	4.2 算术运算符
+			下表列出了常用的算术运算符，假定变量 a 为 10，变量 b 为 20：
+		+	加法	`expr $a + $b` 结果为 30。
+		-	减法	`expr $a - $b` 结果为 10。
+		*	乘法	`expr $a \* $b` 结果为  200。
+		/	除法	`expr $b / $a` 结果为 2。
+		%	取余	`expr $b % $a` 结果为 0。
+		=	赋值	a=$b 将把变量 b 的值赋给 a。
+		==	相等。用于比较两个数字，相同则返回 true。	[ $a == $b ] 返回 false。
+		!=	不相等。用于比较两个数字，不相同则返回 true。	[ $a != $b ] 返回 true。
+		注意：条件表达式要放在方括号之间，并且要有空格，例如: [$a==$b] 是错误的，必须写成 [ $a == $b ]。
+	4.3 关系运算符
+			关系运算符只支持数字，不支持字符串，除非字符串的值是数字。下表列出了常用的关系运算符，假定变量 a 为 10，变量 b 为 20：
+		-eq	检测两个数是否相等，相等返回 true。	[ $a -eq $b ] 返回 false。
+		-ne	检测两个数是否相等，不相等返回 true。	[ $a -ne $b ] 返回 true。
+		-gt	检测左边的数是否大于右边的，如果是，则返回 true。	[ $a -gt $b ] 返回 false。
+		-lt	检测左边的数是否小于右边的，如果是，则返回 true。	[ $a -lt $b ] 返回 true。
+		-ge	检测左边的数是否大等于右边的，如果是，则返回 true。	[ $a -ge $b ] 返回 false。
+		-le	检测左边的数是否小于等于右边的，如果是，则返回 true。	[ $a -le $b ] 返回 true。
+	4.4 布尔运算符
+			下表列出了常用的布尔运算符，假定变量 a 为 10，变量 b 为 20：
+		!	非运算，表达式为 true 则返回 false，否则返回 true。	[ ! false ] 返回 true。
+		-o	或运算，有一个表达式为 true 则返回 true。	[ $a -lt 20 -o $b -gt 100 ] 返回 true。
+		-a	与运算，两个表达式都为 true 才返回 true。	[ $a -lt 20 -a $b -gt 100 ] 返回 false。
+	4.5 逻辑运算符
+			以下介绍 Shell 的逻辑运算符，假定变量 a 为 10，变量 b 为 20:
+		&&	逻辑的 AND	[[ $a -lt 100 && $b -gt 100 ]] 返回 false
+		||	逻辑的 OR	[[ $a -lt 100 || $b -gt 100 ]] 返回 true
+	4.6 字符串运算符
+			下表列出了常用的字符串运算符，假定变量 a 为 "abc"，变量 b 为 "efg"：
+		=	检测两个字符串是否相等，相等返回 true。	[ $a = $b ] 返回 false。
+		!=	检测两个字符串是否相等，不相等返回 true。	[ $a != $b ] 返回 true。
+		-z	检测字符串长度是否为0，为0返回 true。	[ -z $a ] 返回 false。
+		-n	检测字符串长度是否为0，不为0返回 true。	[ -n $a ] 返回 true。
+		str	检测字符串是否为空，不为空返回 true。	[ $a ] 返回 true。
+	4.7 文件测试运算符
+		-b file	检测文件是否是块设备文件，如果是，则返回 true。	[ -b $file ] 返回 false。
+		-c file	检测文件是否是字符设备文件，如果是，则返回 true。	[ -c $file ] 返回 false。
+		-d file	检测文件是否是目录，如果是，则返回 true。	[ -d $file ] 返回 false。
+		-f file	检测文件是否是普通文件（既不是目录，也不是设备文件），如果是，则返回 true。	[ -f $file ] 返回 true。
+		-g file	检测文件是否设置了 SGID 位，如果是，则返回 true。	[ -g $file ] 返回 false。
+		-k file	检测文件是否设置了粘着位(Sticky Bit)，如果是，则返回 true。	[ -k $file ] 返回 false。
+		-p file	检测文件是否是具名管道，如果是，则返回 true。	[ -p $file ] 返回 false。
+		-u file	检测文件是否设置了 SUID 位，如果是，则返回 true。	[ -u $file ] 返回 false。
+		-r file	检测文件是否可读，如果是，则返回 true。	[ -r $file ] 返回 true。
+		-w file	检测文件是否可写，如果是，则返回 true。	[ -w $file ] 返回 true。
+		-x file	检测文件是否可执行，如果是，则返回 true。	[ -x $file ] 返回 true。
+		-s file	检测文件是否为空（文件大小是否大于0），不为空返回 true。	[ -s $file ] 返回 true。
+		-e file	检测文件（包括目录）是否存在，如果是，则返回 true。	[ -e $file ] 返回 true。
+5 Shell 命令
+	5.1 echo
+		显示普通字符串:echo "It is a test"
+		read 命令从标准输入中读取一行,并把输入行的每个字段的值指定给 shell 变量:
+			#!/bin/sh
+			read name 
+			echo "$name It is a test"
+		显示换行:echo -e "OK! \n" # -e 开启转义
+		显示不换行:echo -e "OK! \c" # -e 开启转义 \c 不换行
+		显示结果定向至文件:echo "It is a test" > myfile
+		显示命令执行结果: echo `date`
+	5.2 printf
+		printf 命令的语法：printf  format-string  [arguments...]
+		printf的转义序列:
+			\a	警告字符，通常为ASCII的BEL字符
+			\b	后退
+			\c	抑制（不显示）输出结果中任何结尾的换行字符（只在%b格式指示符控制下的参数字符串中有效），而且，任何留在参数里的字符、任何接下来的参数以及任何留在格式字符串中的字符，都被忽略
+			\f	换页（formfeed）
+			\n	换行
+			\r	回车（Carriage return）
+			\t	水平制表符
+			\v	垂直制表符
+			\\	一个字面上的反斜杠字符
+			\ddd	表示1到3位数八进制值的字符。仅在格式字符串中有效
+			\0ddd	表示1到3位的八进制值字符
+	5.3 test
+		test 命令用于检查某个条件是否成立，它可以进行数值、字符和文件三个方面的测试。
+6 Shell 流程控制
+	6.1 if else-if else
+		if condition1
+		then
+			command1
+		elif condition2 
+		then 
+			command2
+		else
+			commandN
+		fi
+		(如果else分支没有语句执行，就不要写这个else。)	
+	6.2 for 循环
+		for var in item1 item2 ... itemN
+		do
+			command1
+			command2
+			...
+			commandN
+		done
+		(in列表是可选的，如果不用它，for循环使用命令行的位置参数。)
+	6.3 while 语句
+		while condition
+		do
+			command
+		done
+	6.4 until 循环
+		until condition
+		do
+			command
+		done
+		(直至条件为真时停止,测试发生在循环末尾，因此循环至少执行一次—请注意这一点)
+	6.5 case
+		case 值 in
+		模式1)
+			command1
+			...
+			;;
+		模式2）
+			command1
+			...
+			;;
+		*)
+			command1
+			...
+			;;
+		esac
+	6.6 跳出循环
+		break命令允许跳出所有循环（终止执行后面的所有循环）。
+		continue 跳出当前循环
+7 Shell 函数
+	7.1 函数的定义格式如下：
+		[ function ] funname [()]
+		{
+			action;
+			[return int;]
+		}
+	7.2 函数参数
+		函数体内部，通过 $n 的形式来获取参数的值,当n>=10时，需要使用${n}来获取参数。
+8 Shell 输入/输出重定向
+	8.1 
+		command > file	将输出重定向到 file。
+		command < file	将输入重定向到 file。
+		command < infile > outfile  从文件infile读取内容，然后将输出写入到outfile中
+		command > file 2>&1  将 stdout 和 stderr 合并后重定向到 file
+		command >> file	将输出以追加的方式重定向到 file。
+		n > file	将文件描述符为 n 的文件重定向到 file。
+		n >> file	将文件描述符为 n 的文件以追加的方式重定向到 file。
+		n >& m	将输出文件 m 和 n 合并。
+		n <& m	将输入文件 m 和 n 合并。
+		<< tag	将开始标记 tag 和结束标记 tag 之间的内容作为输入。
+	8.2 重定向深入讲解
+		标准输入文件(stdin)：stdin的文件描述符为0，Unix程序默认从stdin读取数据。
+		标准输出文件(stdout)：stdout 的文件描述符为1，Unix程序默认向stdout输出数据。
+		标准错误文件(stderr)：stderr的文件描述符为2，Unix程序会向stderr流中写入错误信息。
+	8.3 Here Document
+		command << delimiter
+			document
+		delimiter
+		将两个 delimiter 之间的内容(document) 作为输入传递给 command。
+		结尾的delimiter 一定要顶格写，前面不能有任何字符，后面也不能有任何字符，包括空格和 tab 缩进。
+	8.4 /dev/null
+		如果希望执行某个命令，但又不希望在屏幕上显示输出结果，那么可以将输出重定向到 /dev/null：$ command > /dev/null
+		如果希望屏蔽 stdout 和 stderr，可以这样写：$ command > /dev/null 2>&1
+9 Shell 文件包含
+	9.1 Shell 文件包含的语法格式如下：
+		. filename   # 注意点号(.)和文件名中间有一空格
+		或
+		source filename
+				
+				

@@ -1,0 +1,176 @@
+
+REM [message],::[message]	//注释
+@	//关闭该命令回显
+echo [{ on|off }] [message]   //打开回显或关闭回显功能
+PAUSE  	//暂停,pause > nul 关闭提示
+errorlevel  //程序返回码，默认值为0，一般命令执行出错会设 errorlevel 为1
+title 新标题	//设置cmd窗口的标题
+COLOR [attr]    //attr颜色属性由两个十六进制数字指定,例如: "COLOR fc" 在亮白色上产生亮红色 							
+					--第一个为背景，第二个则为前景。每个数字可以为以下任何值之一:     
+						0 = 黑色       	1 = 蓝色 		2 = 绿色		3 = 湖蓝色	
+						4 = 红色 		5 = 紫色		6 = 黄色 		7 = 白色
+						8 = 灰色       	9 = 淡蓝色      A = 淡绿色      B = 淡浅绿色     
+						C = 淡红色     	D = 淡紫色		E = 淡黄色  	F = 亮白色 
+mode 	//配置系统设备		
+			串行口:		MODE COMm[:] [BAUD=b] [PARITY=p] [DATA=d] [STOP=s] [to=on|off] [xon=on|off] [odsr=on|off] [octs=on|off] [dtr=on|off|hs] [rts=on|off|hs|tg] [idsr=on|off] 
+			设备状态: 	MODE [device] [/STATUS] 
+			打印重定向: MODE LPTn[:]=COMm[:]  
+			选定代码页: MODE CON[:] CP SELECT=yyy 
+			代码页状态: MODE CON[:] CP [/STATUS]  
+			显示模式:   MODE CON[:] [COLS=c] [LINES=n]  
+			击键率:     MODE CON[:] [RATE=r DELAY=d] 
+GOTO 和 :	//用GOTO XXX跳转到标号:XXX处
+FIND [/V] [/C] [/N] [/I] [/OFF[LINE]] "string" [[drive:][path]filename[ ...]]  //
+			/V        显示所有未包含指定字符串的行。   
+			/C        仅显示包含字符串的行数。   
+			/N        显示行号。    
+			/I        搜索字符串时忽略大小写。   
+			/OFF[LINE] 不要跳过具有脱机属性集的文件。   
+			"string"  指定要搜索的文字串，   
+			[drive:][path]filename              指定要搜索的文件。  
+			如果没有指定路径，FIND 将搜索键入的或者由另一命令产生的文字。			
+start 命令	//批处理中调用外部程序的命令(不理会外部程序的运行状况),例：start explorer d:\ 调用图形界面打开D盘
+assoc 		//设置'文件扩展名'关联，关联到'文件类型'  
+ftype 		//设置'文件类型'关联，关联到'执行程序和参数'
+md d:\mp4   //在 D:\ 建立 mp4 文件夹
+dir			//文件列表 
+cd /d d:\mp4	//更改当前目录为 d:\mp4  
+pushd c:\mp3    //保存当前目录，并切换当前目录为 c:\mp3 
+popd       	//恢复当前目录为刚才保存的 d:\mp4 
+CALL [drive:][path]filename [batch-parameters] 	//在批处理执行过程中调用另一个批处理(另一个批处理执行完后，再继续执行原来的批处理)
+%0~%9	//%0是指批处理文件的本身，%1~%9是批处理参数，也称形参,%*从第一个参数开始的所有参数；
+			%~1         - 删除引号(")，扩充 %1           
+			%~f1        - 将 %1 扩充到一个完全合格的路径名          
+			%~d1        - 仅将 %1 扩充到一个驱动器号          
+			%~p1        - 仅将 %1 扩充到一个路径          
+			%~n1        - 仅将 %1 扩充到一个文件名           
+			%~x1        - 仅将 %1 扩充到一个文件扩展名          
+			%~s1        - 扩充的路径指含有短名          
+			%~a1        - 将 %1 扩充到文件属性          
+			%~t1        - 将 %1 扩充到文件的日期/时间          
+			%~z1        - 将 %1 扩充到文件的大小           
+			%~$PATH : 1 - 查找列在PATH环境变量的目录，并将%1扩充到找到的第一个完全合格的名称。如果环境变量名未被定义，或者没有找文件，此组合键会扩充到空字符串     
+			可以组合修定符来取得多重结果:%~dp1       - 只将 %1 扩展到驱动器号和路径
+SHIFT [/n]	//更改批处理文件中可替换参数的位置。
+IF 	//条件判断语句，语法格式如下：
+		IF [NOT] ERRORLEVEL number command 
+		IF [NOT] string1==string2 command
+		IF [NOT] EXIST filename command
+		ELSE 子句必须出现在同一行上的 IF 之后。例如:
+			IF EXIST filename. (
+				del filename.
+			) ELSE (
+				echo filename. missing.
+			)		
+		IF [/I] string1 compare-op string2 command
+			其中,/I 开关(如果指定)说明要进行的字符串比较不分大小写,compare-op 可以是:
+				EQU - 等于
+				NEQ - 不等于
+				LSS - 小于
+				LEQ - 小于或等于
+				GTR - 大于
+				GEQ - 大于或等于
+		IF CMDEXTVERSION number command
+		IF DEFINED variable command	
+>>,>	//重定向符,常用句柄：0、1、2，未定义句柄：3—9
+| 	//命令管道符	
+^ 	//转义字符,	^是对特殊符号<,>,&的前导字符，在命令中他将以上3 个符号的特殊功能去掉
+&,&&,||	//组合命令,管道命令的优先级高于重定向命令，重定向命令的优先级高于组合命令		
+"" 	//字符串界定符	
+,	//逗号相当于空格，在某些情况下“,”可以用来当做空格使
+;	//分号，当命令相同时，可以将不同目标用；来隔离
+!	//在变量延迟问题中，用来表示变量
+*,?	//通配符,*号表示任意N 个字符,而?号只表示任意一个字符
+()	//把多个命令合成一个命令
+FOR	//	FOR %%variable IN (set) DO command [command-parameters]
+		FOR /D %variable IN (set) DO command [command-parameters]
+		FOR /R [[drive:]path] %variable IN (set) DO command [command-parameters]
+		FOR /L %variable IN (start,step,end) DO command [command-parameters]
+		FOR /F ["options"] %variable IN (file-set) DO command [command-parameters]
+			eol=c 			- 指一个行注释字符的结尾(就一个)
+			skip=n 			- 指在文件开始时忽略的行数。
+			delims=xxx 		- 指分隔符集。这个替换了空格和跳格键的默认分隔符集。
+			tokens=x,y,m-n 	- 指每行的哪一个符号被传递到每个迭代的for 本身。这会导致额外变量名称的分配。m-n格式为一个范围。通过nth 符号指定mth。如果符号字符串中的最后一个字符星号，那么额外的变量将在最后一个符号解析之后分配并接受行的保留文本。
+			usebackq 		- 使用后引号（键盘上数字1 左面的那个键`）。未使用参数usebackq 时：file-set 表示文件，但不能含有空格双引号表示字符串，即"string"单引号表示执行命令，即'command'使用参数usebackq 时：file-set 和"file-set"都表示文件当文件路径或名称中有空格时，就可以用双引号括起来单引号表示字符串，即'string'后引号表示命令执行，即`command`
+系统变量:
+	%ALLUSERSPROFILE% 本地返回“所有用户”配置文件的位置。
+	%APPDATA% 本地返回默认情况下应用程序存储数据的位置。
+	%CD% 本地返回当前目录字符串。
+	%CMDCMDLINE% 本地返回用来启动当前的Cmd.exe 的准确命令行。
+	%CMDEXTVERSION% 系统返回当前的“命令处理程序扩展”的版本号。
+	%COMPUTERNAME% 系统返回计算机的名称。
+	%COMSPEC% 系统返回命令行解释器可执行程序的准确路径。
+	%DATE% 系统返回当前日期。使用与date /t 命令相同的格式。由Cmd.exe 生成。有关date 命令的详细信息，请参阅Date。
+	%ERRORLEVEL% 系统返回上一条命令的错误代码。通常用非零值表示错误。
+	%HOMEDRIVE% 系统返回连接到用户主目录的本地工作站驱动器号。基于主目录值而设置。用户主目录是在“本地用户和组”中指定的。
+	%HOMEPATH% 系统返回用户主目录的完整路径。基于主目录值而设置。用户主目录是在“本地用户和组”中指定的。
+	%HOMESHARE% 系统返回用户的共享主目录的网络路径。基于主目录值而设置。用户主目录是在“本地用户和组”中指定的。
+	%LOGONSERVER% 本地返回验证当前登录会话的域控制器的名称。
+	%NUMBER_OF_PROCESSORS% 系统指定安装在计算机上的处理器的数目。
+	%OS% 系统返回操作系统名称。Windows 2000 显示其操作系统为Windows_NT。
+	%PATH% 系统指定可执行文件的搜索路径。
+	%PATHEXT% 系统返回操作系统认为可执行的文件扩展名的列表。
+	%PROCESSOR_ARCHITECTURE% 系统返回处理器的芯片体系结构。值：x86 或IA64基于Itanium
+	%PROCESSOR_IDENTFIER% 系统返回处理器说明。
+	%PROCESSOR_LEVEL% 系统返回计算机上安装的处理器的型号。
+	%PROCESSOR_REVISION% 系统返回处理器的版本号。
+	%PROMPT% 本地返回当前解释程序的命令提示符设置。由Cmd.exe 生成。
+	%RANDOM% 系统返回0 到32767 之间的任意十进制数字。由Cmd.exe 生成。
+	%SYSTEMDRIVE% 系统返回包含Windows server operating system 根目录（即系统根目录）的驱动器理器的数目。
+	%OS% 系统返回操作系统名称。Windows 2000 显示其操作系统为Windows_NT。
+	%PATH% 系统指定可执行文件的搜索路径。
+	%PATHEXT% 系统返回操作系统认为可执行的文件扩展名的列表。
+	%PROCESSOR_ARCHITECTURE% 系统返回处理器的芯片体系结构。值：x86 或IA64基于Itanium
+	%PROCESSOR_IDENTFIER% 系统返回处理器说明。
+	%PROCESSOR_LEVEL% 系统返回计算机上安装的处理器的型号。
+	%PROCESSOR_REVISION% 系统返回处理器的版本号。
+	%PROMPT% 本地返回当前解释程序的命令提示符设置。由Cmd.exe 生成。
+	%RANDOM% 系统返回0 到32767 之间的任意十进制数字。由Cmd.exe 生成。
+	%SYSTEMDRIVE% 系统返回包含Windows server operating system 根目录（即系统根目录）的驱动器。
+	%SYSTEMROOT% 系统返回Windows server operating system 根目录的位置。
+	%TEMP% 和%TMP% 系统和用户返回对当前登录用户可用的应用程序所使用的默认临时目录。有些应用程序需要TEMP，而其他应用程序则需要TMP。
+	%TIME% 系统返回当前时间。使用与time /t 命令相同的格式。由Cmd.exe 生成。有关time 命令的详细信息，请参阅Time。
+	%USERDOMAIN% 本地返回包含用户帐户的域的名称。
+	%USERNAME% 本地返回当前登录的用户的名称。
+	%USERPROFILE% 本地返回当前用户的配置文件的位置。
+	%WINDIR% 系统返回操作系统目录的位置。这么多系统变量,我们如何知道他的值是什么呢?在CMD 里输入echo %WINDIR%这样就能显示一个变量的值了!举个实际例子,比如我们要复制文件到当前帐号的启动目录里就可以这样copy d:\1.bat "%USERPROFILE%\「开始」菜单\程序\启动\"
+	%USERNAME% 本地返回当前登录的用户的名称。注意有空格的目录要用引号引起来另外还有一些系统变量,他们是代表一个意思,或者一个操作!他们分别是%0 %1 %2 %3 %4 %5 ......一直到%9 还有一个%*
+	%0 这个有点特殊,有几层意思,先讲%1-%9 的意思.
+	%1 返回批处理的第一个参数
+	%2 返回批处理的第二个参数
+	%3-%9 依此推类
+set var=我是值	//自定义变量
+set /p var=请输入变量的值	//用户手工输入变量的值
+SET /A var=expression	//等号右边的字符串为被评估的数字表达式
+		评估器很简单并以递减的优先权顺序支持下列操作:
+		() 					-分组
+		! ~ - 				-一元运算符
+		* / % 				-算数运算符
+		+ - 				-算数运算符
+		<< >> 				-二进制逻辑移位
+		& 					-二进制按位“与”
+		^ 					-二进制按位“异”
+		| 					-二进制按位“或”
+		= *= /= %= += -= 	-算数赋值
+		&= ^= |= <<= >>= 	-二进制运算赋值
+		, 					-表达式分隔符
+		对于"逻辑或取余操作符",我们需要把他们用双引号引起来,也可以用转义字符^
+aet	//字符串替换:
+		set var=%PATH:str1=str2%	#将字符串变量%PATH%中的str1 替换为str2
+	字符串截取:
+		set var=%a:~[m[,n]]%	#方括号表示可选，%为变量标识符，a 为变量名，不可少，冒号用于分隔变量名和说明部分，符号～可以简单理解为“偏移”即可，m 为偏移量（缺省为0），n 为截取长度（缺省为全部）
+			#其他两种语法:%PATH:~-10%,%PATH:~0,-2%
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
