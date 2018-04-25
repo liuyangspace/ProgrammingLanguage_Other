@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 实体 -->
+<!ENTITY info "凤姐">
+<!ENTITY % userInfo "name,age,tel">
+<!ENTITY part SYSTEM "xml.xml">
+
+<!-- 元素 -->
+<!ELEMENT books (person,user,worker)>
+<!ELEMENT book (#PCDATA)>
+<!ELEMENT password ANY>
+<!ELEMENT money EMPTY>
+<!ELEMENT person (%userInfo;)>
+<!ELEMENT user (%userInfo;,password)>
+<!ELEMENT worker (%userInfo;,money)>
+
+<!-- 属性 -->
+<!ATTLIST book
+    id ID #REQUIRED
+    pId IDREF #IMPLIED
+    city CDATA #FIXED "北京"
+    lang (EN|CN|JP|TW) "CN"
+>

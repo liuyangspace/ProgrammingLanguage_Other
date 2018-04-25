@@ -1,0 +1,128 @@
+
+Schema
+info:https://www.w3.org/2001/XMLSchema
+
+3.2,schema
+    * 扩展名：*.xsd
+    * schema文档来说是基于xml，根元素是schema，在http://www.w3.org/2001/XMLSchema定义
+    3.2,1,关联
+        通用：xmlns(:别名) : 引用已有的命名空间,属性值为已有 targetNamespace，不设别名即为默认命名空间
+        xsd关联xsd:
+            schema元素属性:
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"  : 引入官方规定，引入已规定元素
+                targetNamespace : 为当前的schema文档命名空间Namespace,属性值要求：必须全球唯一
+                elementFormDefault="qualified" : 一个实例文档中被局部声明的元素是否必须被目标命名空间(targetNamespace)所规范,
+                    qualified：任何xml实例文档必须声明其在schema文档中使用 的每一个命名空间
+                    unqualified：在XML实例文档“隐藏”该命名空间，因此在实例 文档中仅需对目标命名空间进行命名空间声明
+                attributeFormDefault="qualified" : attributeFormDefault元素用于指定局部属性是否受到该schema指定targetNamespace所指定的名称空间限定
+        xml关联xsd:
+            根元素属性:
+                xmlns(:别名)= : 引用已有的命名空间,属性值为已有(本地xsd) targetNamespace，不设别名即为默认命名空间
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" : 引入官方规定，将当前的xml文档实例化
+                xsi:schemaLocation="(引用的本地xsd的命名空间targetNamespace) (本地xsd文件url)" : 关联本地xsd
+    3.2,2,schema文档结构
+        schema元素:
+            element 元素:定义根元素,属性: name,指定元素名;type,指定类型
+                complexType/simpleType 元素: 子元素类型(复合/简单), 属性: name,指定自定义类型名
+                    sequence/choice/all 元素: 子元素排列(顺序/可选/任意)
+                        element...(子元素)
+                    simpleContent 元素: 简单内容
+                        extension 元素: 将简单的内容扩展成复杂的类型，属性: base,指定类型
+                            attribute 元素: 定义属性, 属性: name,确定名称;type,确定类型;use,用法(optional,可选;required,必须;prohibited,禁用)
+            complexType 元素: 自定义类型,属性: name,指定自定义类型名
+                simpleContent...
+    3.2,3,schema元素
+        元素:
+            #类型
+                schema          包含一个已定义的schema
+                 import         向一个文档添加带有不同目标命名空间的多个 schema。
+                 include        向一个文档添加带有相同目标命名空间的多个 schema。
+                 annotation     annotation 元素是一个顶层元素，规定 schema 的注释。
+                  appInfo       规定 annotation 元素中应用程序要使用的信息。
+                  documentation 定义 schema 中的文本注释。
+                element         声明一个元素
+                                    name : 元素名
+                                    type : 元素类型
+                                    substitutionGroup : 替换元素
+                                    block : 阻止元素替换
+                                    ref : 引用元素
+                attribute       声明一个属性
+                                    name : 属性名
+                                    type : 属性类型
+                                    use  : 用法( optional ,可选; required ,必须; prohibited ,禁用)
+                                    default : 默认值
+                                    fixed : 固定值
+                any             使创作者可以通过未被 schema 规定的元素来扩展 XML 文档。
+                anyAttribute    使创作者可以通过未被 schema 规定的属性来扩展 XML 文档
+            #数据类型
+                complexType     复合类型，包含其他元素及/或属性的 XML 元素,( <xs:complexType mixed="true"> ,带有混合内容的复合类型 )
+                simpleType      简易类型，仅包含文本的元素。它不会包含任何其他的元素或属性。
+                extension       扩展已有的 simpleType 或 complexType 元素。
+                                    base：确定简单内容的类型
+                simpleContent   用于simpleType,对其内容约束和扩展等
+                redefine        重新定义从外部架构文件中获取的简单和复杂类型、组和属性组。
+                list            从一个特定数据类型的集合中选择定义一个简单类型元素
+                union           从一个特定简单数据类型的集合中选择定义一个简单类型元素
+                uniques         定义一个属性或元素值，它必须在一个特定范围内
+            #指示器
+                all             规定子元素能够以任意顺序出现，每个子元素可出现零次或一次。
+                sequence        给一组元素定一个特定序列
+                choice          允许唯一的一个元素被从一个组中被选择
+                minOccurs       最小出现次数，value
+                maxOccurs       最大出现次数，value
+                group           把一组元素声明在一起，便于被复合类型使用
+                attributeGroup  把一组属性声明在一起，便于被复合类型使用
+            #约束
+                restriction     定义对 simpleType、simpleContent 或 complexContent 的约束。
+                                    base：确定简单内容的类型
+                maxExclusive    定义数值的上限。所允许的值必须小于此值。
+                maxInclusive    定义数值的上限。所允许的值必须小于或等于此值。，value : 最大值
+                minInclusive    定义数值的下限。所允许的值必需大于或等于此值。，value : 最小值
+                minExclusive    定义数值的下限。所允许的值必需大于此值。
+                enumeration     给定值限定，value
+                fractionDigits  定义所允许的最大的小数位数。必须大于等于0。
+                totalDigits     定义所允许的阿拉伯数字的精确位数。必须大于0。
+                pattern         正则限定，value : 正则式
+                whiteSpace      空白字符的限定，value : (preserve 不移除,replace 移除,collapse 移除而多个连续的空格会被缩减为一个单一的空格)
+                length          长度的限定, value : 长度
+                minLength       最小长度的限定, value : 长度
+                maxLength       最大长度的限定, value : 长度
+            #其他
+                key             指定属性或元素值（或一组值）必须是指定范围内的键。
+                keyref          规定属性或元素值（或一组值）对应指定的 key 或 unique 元素的值。
+                field           规定 XPath 表达式，该表达式规定用于定义标识约束的值。
+                notation        描述 XML 文档中非 XML 数据的格式。
+                selector        指定 XPath 表达式，该表达式为标识约束选择一组元素。
+        预定义元素类型:
+            #字符串数据类型
+            string          字符串数据类型可包含字符、换行、回车以及制表符。
+            normalizedString 规格化字符串数据类型同样可包含字符，但是 XML 处理器会移除折行，回车以及制表符。
+            token           数据类型同样可包含字符，但是 XML 处理器会移除换行符、回车、制表符、开头和结尾的空格以及（连续的）空格。
+            #日期及时间数据类型
+            date
+            time
+            dateTime
+            duration        持续时间数据类型用于规定时间间隔。
+            #数值数据类型
+            byte            有正负的 8 位整数
+            decimal         十进制数
+            int             有正负的 32 位整数
+            integer         整数值
+            long            有正负的 64 位整数
+            negativeInteger 仅包含负值的整数 ( .., -2, -1.)
+            nonNegativeInteger 仅包含非负值的整数 (0, 1, 2, ..)
+            nonPositiveInteger 仅包含非正值的整数 (.., -2, -1, 0)
+            positiveInteger 仅包含正值的整数 (1, 2, ..)
+            short           有正负的 16 位整数
+            unsignedLong    无正负的 64 位整数
+            unsignedInt     无正负的 32 位整数
+            unsignedShort   无正负的 16 位整数
+            unsignedByte    无正负的 8 位整数
+            #其他数据类型
+            boolean         逻辑数据性用于规定 true 或 false 值。
+            hexBinary       十六进制编码的二进制数据
+            base64Binary    Base64 编码的二进制数据
+            anyURI          anyURI 数据类型用于规定 URI。
+
+
+

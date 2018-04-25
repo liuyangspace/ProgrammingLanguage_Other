@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?DOCTYPE test SYSTEM "test.dtd" ?>
+<test key="value">
+    <child>
+
+    </child>
+</test>

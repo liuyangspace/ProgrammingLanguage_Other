@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<test xmlns="http://www.example.org/schema"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.example.org/schema schema.xsd"
+>
+    <test1 price="123">4</test1>
+    <test2>4</test2>
+</test>

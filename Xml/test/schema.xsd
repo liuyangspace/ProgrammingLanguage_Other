@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://www.example.org/schema"
+        xmlns:tns="http://www.example.org/schema"
+        elementFormDefault="qualified"
+        attributeFormDefault="qualified"
+>
+    <!-- 确定根元素 -->
+    <element name="test" >
+        <complexType>
+            <sequence> <!-- 顺序，内部包含的子元素 -->
+                <element name="test1" type="tns:my_int" >
+
+                </element>
+                <element name="test2" type="integer" >
+                    <simpleType>
+                        <restriction base="integer">
+                            <maxInclusive value="2">
+
+                            </maxInclusive>
+                            <minInclusive value="5">
+
+                            </minInclusive>
+                        </restriction>
+                    </simpleType>
+                </element>
+            </sequence>
+        </complexType>
+    </element>
+    <!-- 自定义类型 -->
+    <complexType name="my_int">
+        <simpleContent>
+            <extension base="element">
+                <attribute name="price" type="integer" use="required">
+
+                </attribute>
+            </extension>
+        </simpleContent>
+    </complexType>
+</schema>

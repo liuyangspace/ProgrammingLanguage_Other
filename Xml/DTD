@@ -1,0 +1,54 @@
+
+DTD
+info:https://www.w3.org/2001/XMLSchema
+
+3.1,DTD(Document Type Definition)
+    3.1.1,XML关联DTD
+        * 内部关联,格式：<!DOCTYPE 根元素 [语法]>
+        * 外部关联,格式：<!DOCTYPE 根元素 SYSTEM "URI">
+        * 公共关联,格式：<!DOCTYPE 根元素 PUBLIC "文档名称" "文档URL">
+    3.1.2,DTD结构
+        * 元素
+            * 格式：<!ELEMENT 元素名称 约束>
+                * 符号：
+                    ? : 0 1       + : >=1       * : >=0
+                    (): 分组      | : 选择      ，: 顺序
+                * 类型：
+                    元素名，其他元素
+                    #PCDATA，只能书写字符，不能包含子元素，注意： (#PCDATA)
+                    EMPTY,元素内容为空
+                    ANY，元素内容任意
+        * 属性：
+            * 格式：<!ATTLIST 元素名称 [属性名称 属性类型 约束]... >
+                * 类型
+                    * CDATA，字符
+                    * ()，选择
+                    * ID，设置唯一标识，注意，必须字母开头
+                    * IDREF，引用存在的ID值
+                    * IDREFS，引用存在的ID值列表
+                    * IDREFS，引用存在的ID值列表
+                    * NMTOKEN，合法的XML名称
+                    * NMTOKENS，合法的XML名称列表
+                    * ENTITY，实体
+                    * ENTITYS，实体列表
+                    * NOTATION，符号名称
+                    * xml:，预定义xml值
+                * 约束
+                    * #REQUIRED，必须填写
+                    * #IMPLIED,可选
+                    * #FIXED value，固定值
+                    * defaultValue，默认值
+        * 实体
+            * 内部实体
+                * 引用实体
+                    * 格式：<!ENTITY 实体名称 "内容">
+                    * 使用位置：在xml文档中使用
+                    * xml内使用格式：&实体名称;
+                * 参数实体
+                    * 格式：<!ENTITY % 实体名称 "内容">
+                    * 使用位置：在DTD文档中使用
+                    * dtd内使用格式：%实体名称;
+            * 外部实体
+                * 格式：<!ENTITY 实体名称 SYSTEM "URI">
+                * 使用位置：在xml文档中使用
+                * xml内使用格式：&实体名称;

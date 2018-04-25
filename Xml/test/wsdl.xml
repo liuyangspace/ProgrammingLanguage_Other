@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<definitions xmlns:soap="soap-envelope.sxd" soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+
+    <message name="getTermRequest">
+        <part name="term" type="xs:string"/>
+    </message>
+
+    <message name="getTermResponse">
+        <part name="value" type="xs:string"/>
+    </message>
+
+    <message name="newTermValues">
+        <part name="term" type="xs:string"/>
+        <part name="value" type="xs:string"/>
+    </message>
+
+    <!--
+        One-way 此操作可接受消息，但不会返回响应。
+        Request-response 此操作可接受一个请求并会返回一个响应
+        Solicit-response 此操作可发送一个请求，并会等待一个响应。
+        Notification 此操作可发送一条消息，但不会等待响应。
+    -->
+
+    <portType name="glossaryTerms">
+        <operation name="setTerm">
+            <input name="newTerm" message="newTermValues"/>
+        </operation>
+    </portType >
+
+    <portType name="glossaryTerms">
+        <operation name="getTerm">
+            <input message="getTermRequest"/>
+            <output message="getTermResponse"/>
+        </operation>
+    </portType>
+
+    <!-- 绑定到SOAP -->
+    <binding type="glossaryTerms" name="b1">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+        <operation>
+            <soap:operation soapAction="http://example.com/getTerm" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+    </binding>
+
+</definitions>

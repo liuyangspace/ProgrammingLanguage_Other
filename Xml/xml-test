@@ -1,0 +1,38 @@
+
+1,info
+    IE5以上浏览器内置了XML解析工具：Microsort.XMLDOM，开发人员可以编写javascript代码，利用这个解析工具装载xml文件，并对xml文件进行dtd验证。
+    创建xml文档解析器对象:
+        var xmldoc = new ActiveXObject("Microsoft.XMLDOM");
+    开启xml校验:
+        xmldoc.validateOnParse = "true";
+    装载xml文档:
+        xmldoc.load("book.xml");
+    获取错误信息:
+        xmldoc.parseError.reason;
+        xmldoc.parseError.line
+2,demo
+    <html>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Insert title here</title>
+    <script type="text/javascript">
+    function initXml(){
+
+    var xmldoc = new ActiveXObject("Microsoft.XMLDOM");
+    xmldoc.validateOnParse = "true";
+    /**********修改成自己的xml文件*****************/
+    xmldoc.load("book.xml");
+    /***************************************************************/
+    document.write("<br>Error Code: ");
+    document.write(xmldoc.parseError.errorCode);
+    document.write("<br>Error Reason: ");
+    document.write(xmldoc.parseError.reason);
+    document.write("<br>Error Line: ");
+    document.write(xmldoc.parseError.line);
+    }
+    </script>
+    </head>
+    <body onload="initXml();">
+    </body>
+    </html>
+

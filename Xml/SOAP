@@ -1,0 +1,30 @@
+
+SOAP
+(Simple Object Access Protocol,简单对象访问协议)
+
+1,SOAP
+    SOAP 是一种基于 XML ，通过 HTTP 进行 多应用程序间 进行信息交换 的协议。
+2,SOAP 结构
+    <Envelope>                      必需元素，可把此 XML 文档标识为一条 SOAP 消息
+        xmlns:soap="http://www.w3.org/2001/12/soap-envelope"            必须使用 SOAP Envelope 命名空间, 引入SOAP命名空间
+        soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding"    必须使用 SOAP Encoding 命名空间，属性 用于定义在文档中使用的数据类型。
+    <Header> ?                      可选元素，包含头部信息(包含有关 SOAP 消息的应用程序专用信息（比如认证、支付等）,如果 Header 元素被提供，则它必须是 Envelope 元素的第一个子元素)
+        soap:actor="URI"            属性，可被用于将 Header 元素寻址到一个特定的端点。
+        soap:mustUnderstand="0|1"   属性，可用于标识标题项对于要对其进行处理的接收者来说是强制的还是可选的。
+        soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding"
+    <Body>                          必需元素，包含打算传送到消息最终端点的实际 SOAP 消息。
+        <Fault> ?                   可选元素，提供有关在处理此消息所发生错误的信息,必须是 Body 元素的子元素,只能出现一次。
+            <faultcode>             供识别故障的代码
+                VersionMismatch     SOAP Envelope 元素的无效命名空间被发现
+                MustUnderstand      Header 元素的一个直接子元素（带有设置为 "1" 的 mustUnderstand 属性）无法被理解。
+                Client              消息被不正确地构成，或包含了不正确的信息。
+                Server              服务器有问题，因此无法处理进行下去。
+            <faultstring>           可供人阅读的有关故障的说明
+            <faultactor>            有关是谁引发故障的信息
+            <detail>                存留涉及 Body 元素的应用程序专用错误信息
+
+    #SOAP 消息不能包含 DTD 引用
+    #SOAP 消息不能包含 XML 处理指令
+3,SOAP HTTP Binding
+    SOAP 请求可能是 HTTP POST 或 HTTP GET 请求。
+    HTTP POST 请求规定至少两个 HTTP 头：Content-Type 和 Content-Length。
