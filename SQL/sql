@@ -1,0 +1,232 @@
+
+SQL (Structured Query Language,结构化查询语言)
+
+(部分总结 以 MySQL -v=5.6.21 为默认)
+
+1,info
+    1.1,SQL 分为：
+        DDL(data definition language,数据定义语言)
+            CREATE          - 创建
+            ALTER           - 修改
+            DROP            - 删除
+        DML(data manipulation language,数据操作语言)
+            UPDATE          - 更新
+            DELETE          - 删除
+            INSERT INTO     - 插入
+        DQL(data query language,数据查询语言)
+            SELECT WHERE JOIN - 查询
+        DCL(data control language,数据控制语言)
+            GRANT           -
+            REVOKE          -
+            COMMIT          -
+            ROLLBACK        -
+    1.2,关系database结构
+        database
+        table
+        column
+        index
+        view
+        constraint
+    1.3,
+        # SQL 对大小写不敏感
+        # SQL 使用单引号来环绕文本值（大部分数据库系统也接受双引号）。
+        # NULL 和 0 不等价的。
+2,DDL
+    database:
+        SHOW DATABASES
+        USE DATABASE            # 切换数据库
+        CREATE DATABASE [ IF NOT EXISTS ] databaseName
+        DROP DATABASE [ IF EXISTS ] databaseName
+    table:
+        SHOW TABLES
+        DESC                    # 展现表结构
+        CREATE TABLE tableName ( columnName dataType [constraints, ...], ... [,CONSTRAINT constraints, ...] )
+        ALTER TABLE tableName ADD constraints
+        ALTER TABLE tableName ADD columnName dataType
+        ALTER TABLE tableName DROP COLUMN columnName
+        ALTER TABLE tableName ALTER COLUMN columnName dataType
+        TRUNCATE TABLE tableName        #清空表
+        DROP TABLE tableName
+        # MySQL
+        ALTER TABLE tableName ALTER columnName SET DEFAULT 'defaultValue'
+        ALTER TABLE tableName ALTER columnName DROP DEFAULT
+        # SQL Server / Oracle / MS Access
+        ALTER TABLE tableName ALTER COLUMN columnName SET DEFAULT 'defaultValue'
+        ALTER TABLE tableName ALTER COLUMN columnName DROP DEFAULT
+    index:
+        CREATE [UNIQUE] INDEX indexName ON tableName (columnName1,columnName2)
+        ALTER TABLE tableName ADD （UNIQUE|PRIMARY KEY) uniqueIndexName
+        ALTER TABLE tableName1 ADD [CONSTRAINT foreignKeyName] FOREIGN KEY (columnName1) REFERENCES tableName2(columnName2)
+        ALTER TABLE tableName ADD [CONSTRAINT checkKeyName] CHECK ( check1 AND check2)
+        ALTER TABLE tableName DROP INDEX uniqueIndexName
+        # MySQL
+        ALTER TABLE tableName DROP (PRIMARY KEY|FOREIGN KEY|CHECK) keyName
+        ALTER TABLE tableName DROP INDEX indexName
+        # MS SQL Server
+        DROP INDEX tableName.indexName
+        # SQL Server / Oracle / MS Access:
+        ALTER TABLE tableName DROP CONSTRAINT keyName
+        # Microsoft SQLJet / Microsoft Access
+        DROP INDEX indexName ON tableName
+        # IBM DB2 和 Oracle
+        DROP INDEX indexName
+    view:
+        CREATE VIEW viewName AS selectClause
+        SELECT * FROM viewName
+        DROP VIEW viewName
+    约束constraints
+        NOT NULL            不接受 NULL 值
+        UNIQUE              唯一索引,标识数据库表中的每条记录。
+                                多个列：CONSTRAINT uniqueIndexName UNIQUE (columnName1,columnName2,...)
+        PRIMARY KEY         主键,唯一,非NULL,每个表有且只有一个
+                                多个列：CONSTRAINT primaryKeyName PRIMARY KEY (columnName1,columnName2,...)
+        FOREIGN KEY         外键，一个表中的 FOREIGN KEY 指向另一个表中的 PRIMARY KEY。
+        CHECK ()            限制列中的值的范围(CHECK (id>0),)
+        DEFAULT             向列中插入默认值。
+        AUTO_INCREMENT      开始值是 1，每条新记录递增 1。
+3,DQL
+    SELECT:
+        SELECT [ DISTINCT ] (columnName, ...|*) FROM tableName, ... [ (WHERE whereClause)|(JOIN tableName ON whereClause) ]
+            [ ORDER BY orderColumnName (DESC|ASC), ...] [ GROUP BY columnName ] [ LIMIT startNumber,endNumber ] [ HAVING havingClause ]
+        # table.field   : columnName = [tableName.|tableAlias.]columnName
+        # Alias         : tableName = tableName[ AS tableAlias ]
+    WHERE:
+        操作符:
+            =                           等于
+            <>                          不等于
+            >                           大于
+            <                           小于
+            >=                          大于等于
+            <=                          小于等于
+            BETWEEN..AND...             在某个范围内
+            NOT BETWEEN..AND...         在某个范围内
+            LIKE                        搜索某种模式
+            NOT LIKE
+            IS NULL                     是否为NULL
+            IS NOT NULL
+            IN ( valueList | selectClause ) 存在于，IN (value1,value2,...)
+        通配符:
+            %                           替代一个或多个字符
+            _                           仅替代一个字符
+            [charList]                  字符列中的任何单一字符
+            [^charList]                 不在字符列中的任何单一字符
+            [!charList]                 不在字符列中的任何单一字符
+        条件结合:
+            AND                         和
+            OR                          或
+    表链接:
+        # 内链接
+        [ INNER ]JOIN               内链接，如果表中有至少一个匹配，则返回行
+        # 外链接
+        LEFT [ OUTER ] JOIN         左链接，即使右表中没有匹配，也从左表返回所有的行
+        RIGHT [ OUTER ] JOIN        右链接，即使左表中没有匹配，也从右表返回所有的行
+        FULL [ OUTER ] JOIN         只要其中一个表中存在匹配，就返回行
+    UNION:
+        UNION       操作符用于合并两个或多个 SELECT 语句的结果集。SELECT 语句必须拥有相同数量的列。
+        UNION ALL   合并两个或多个 SELECT 语句的结果集,允许重复的值。
+4,DML
+    INSERT:
+        INSERT INTO tableName (columnName, ...) VALUES (fieldValue, ,....)
+        SELECT (columnName, ...|*) INTO newTableName [ IN externalDatabase ] FROM oldTableName [ (WHERE whereClause)|(JOIN tableName ON whereClause) ]
+    UPDATE
+        UPDATE tableName SET columnName=fieldValue, ... WHERE whereClause
+    DELETE
+        DELETE [ * ] FROM tableName [ WHERE whereClause ]
+5,DCL
+    GRANT:
+        GRANT [INSERT|SELECT|UPDATE|DELETE|ALL] ON databaseName.tableName TO 'userName'@'hostName' IDENTIFIED BY 'password'  # 授权
+    REVOKE:
+        REVOKE [INSERT|SELECT|UPDATE|DELETE|ALL] ON databaseName.tableName TO 'userName'@'hostName'  # 回收权限
+    USER:
+        CREATE USER 'userName'@'hostName' [ IDENTIFIED BY 'password' ]  # 创建用户
+        DROP USER 'userName'@'hostName'                                 # 删除用户
+        SHOW GRANTS FOR 'userName'@'hostName'                           # 查看用户权限
+        SELECT user,host FROM mysql.user                                # 查看所有用户权限
+        SET PASSWORD=PASSWORD(newPassword)                              # 重置密码
+        SET PASSWORD FOR 'userName'@'hostName'=PASSWORD(newPassword)    # 重置用户密码
+6,数据类型dataType:
+        integer(size)       仅容纳整数。在括号内规定数字的最大位数。
+        int(size)
+        smallint(size)
+        tinyint(size)
+        decimal(size,d)     容纳带有小数的数字。"size" 规定数字的最大位数。"d" 规定小数点右侧的最大位数。
+        numeric(size,d)
+        char(size)          容纳固定长度的字符串（可容纳字母、数字以及特殊字符）。在括号中规定字符串的长度。
+        varchar(size)       容纳可变长度的字符串（可容纳字母、数字以及特殊的字符）。在括号中规定字符串的最大长度。
+        date(yyyymmdd)      容纳日期。
+    # MySQL 数据类型
+        # Text 类型
+        CHAR(size)          保存固定长度的字符串（可包含字母、数字以及特殊字符）。在括号中指定字符串的长度。最多 255 个字符。
+        VARCHAR(size)       保存可变长度的字符串（可包含字母、数字以及特殊字符）。在括号中指定字符串的最大长度。最多 255 个字符。
+                                注释：如果值的长度大于 255，则被转换为 TEXT 类型。
+        TINYTEXT            存放最大长度为 255 个字符的字符串。
+        TEXT                存放最大长度为 65,535 个字符的字符串。
+        BLOB                用于 BLOBs (Binary Large OBjects)。存放最多 65,535 字节的数据。
+        MEDIUMTEXT          存放最大长度为 16,777,215 个字符的字符串。
+        MEDIUMBLOB          用于 BLOBs (Binary Large OBjects)。存放最多 16,777,215 字节的数据。
+        LONGTEXT            存放最大长度为 4,294,967,295 个字符的字符串。
+        LONGBLOB            用于 BLOBs (Binary Large OBjects)。存放最多 4,294,967,295 字节的数据。
+        ENUM(x,y,z,etc.)    允许你输入可能值的列表。可以在 ENUM 列表中列出最大 65535 个值。如果列表中不存在插入的值，则插入空值。
+                                注释：这些值是按照你输入的顺序存储的。 可以按照此格式输入可能的值：ENUM('X','Y','Z')
+        SET                 与 ENUM 类似，SET 最多只能包含 64 个列表项，不过 SET 可存储一个以上的值。
+        # Number 类型
+        TINYINT(size)       -128 到 127 常规。0 到 255 无符号*。在括号中规定最大位数。
+        SMALLINT(size)      -32768 到 32767 常规。0 到 65535 无符号*。在括号中规定最大位数。
+        MEDIUMINT(size)     -8388608 到 8388607 普通。0 to 16777215 无符号*。在括号中规定最大位数。
+        INT(size)           -2147483648 到 2147483647 常规。0 到 4294967295 无符号*。在括号中规定最大位数。
+        BIGINT(size)        -9223372036854775808 到 9223372036854775807 常规。0 到 18446744073709551615 无符号*。在括号中规定最大位数。
+        FLOAT(size,d)       带有浮动小数点的小数字。在括号中规定最大位数。在 d 参数中规定小数点右侧的最大位数。
+        DOUBLE(size,d)      带有浮动小数点的大数字。在括号中规定最大位数。在 d 参数中规定小数点右侧的最大位数。
+        DECIMAL(size,d)     作为字符串存储的 DOUBLE 类型，允许固定的小数点。
+        # 日期/时间
+        DATE()              日期。格式：YYYY-MM-DD 注释：支持的范围是从 '1000-01-01' 到 '9999-12-31'
+        DATETIME()          *日期和时间的组合。格式：YYYY-MM-DD HH:MM:SS 注释：支持的范围是从 '1000-01-01 00:00:00' 到 '9999-12-31 23:59:59'
+        TIMESTAMP()         *时间戳。TIMESTAMP 值使用 Unix 纪元('1970-01-01 00:00:00' UTC) 至今的描述来存储。格式：YYYY-MM-DD HH:MM:SS
+                                注释：支持的范围是从 '1970-01-01 00:00:01' UTC 到 '2038-01-09 03:14:07' UTC
+        TIME()              时间。格式：HH:MM:SS 注释：支持的范围是从 '-838:59:59' 到 '838:59:59'
+        YEAR()              2 位或 4 位格式的年。
+                                注释：4 位格式所允许的值：1901 到 2155。2 位格式所允许的值：70 到 69，表示从 1970 到 2069。
+    # SQL Server
+        # 日期/时间
+        DATE                格式 YYYY-MM-DD
+        DATETIME            格式: YYYY-MM-DD HH:MM:SS
+        SMALLDATETIME       格式: YYYY-MM-DD HH:MM:SS
+        TIMESTAMP           格式: 唯一的数字
+7,常用函数
+        AVG( columnName )                               平均值。
+        COUNT( [DISTINCT] (columnName|*) )              统计。
+        FIRST( columnName )                             第一个记录的值。
+        LAST( columnName )                              最后一个记录的值。
+        MAX( columnName )                               最大值。
+        MIN( columnName )                               最小值。
+        SUM( columnName )                               总数。
+        UCASE( columnName )                             把字段的值转换为大写。
+        LCASE( columnName )                             把字段的值转换为小写。
+        MID( columnName ,start [,length] )              从文本字段中提取字符。
+        LEN( columnName )                               返回文本字段中值的长度。
+        ROUND( columnName ,decimals )                   把数值字段舍入为指定的小数位数。
+        FORMAT( columnName ,format )                    对字段的显示进行格式化。
+        GROUP BY columnName                             分组。
+        HAVING havingClause                             替代 WHERE 关键字 与合计函数一起使用。
+    # MySQL Date 函数
+        # 日期/时间
+        NOW()                                           返回当前的日期和时间
+        CURDATE()                                       返回当前的日期
+        CURTIME()                                       返回当前的时间
+        DATE()                                          提取日期或日期/时间表达式的日期部分
+        EXTRACT()                                       返回日期/时间按的单独部分
+        DATE_ADD()                                      给日期添加指定的时间间隔
+        DATE_SUB()                                      从日期减去指定的时间间隔
+        DATEDIFF()                                      返回两个日期之间的天数
+        DATE_FORMAT()                                   用不同的格式显示日期/时间
+    # SQL Server Date 函数
+        # 日期/时间
+        GETDATE()                                       返回当前日期和时间
+        DATEPART()                                      返回日期/时间的单独部分
+        DATEADD()                                       在日期中添加或减去指定的时间间隔
+        DATEDIFF()                                      返回两个日期之间的时间
+        CONVERT()                                       用不同的格式显示日期/时间
+*.
+    SQL     ISO (1987) and ANSI (1986) standard for the SQL.
+    T-SQL   即 Transact-SQL，是 SQL 在 Microsoft SQL Server 上的增强版。
+    PL/SQL  是 Oracle 数据库对 SQL 的扩展。
