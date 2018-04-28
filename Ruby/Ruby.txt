@@ -1,39 +1,39 @@
 
 1.
-	���ı���:���ļ���ͷ���� # -*- coding: UTF-8 -*-��EMACд���� ���� #coding=utf-8 �����ˡ�
-	������ѡ��:
-		-a	�� -n �� -p һ��ʹ��ʱ�����Դ��Զ����ģʽ(auto split mode)����鿴 -n �� -p ѡ�
-		-c	ֻ����﷨����ִ�г���
-		-C dir	��ִ��ǰ�ı�Ŀ¼���ȼ��� -X����
-		-d	���õ���ģʽ���ȼ��� -debug����
-		-F pat	ָ�� pat ��ΪĬ�ϵķ���ģʽ��$;����
-		-e prog	ָ�� prog ��Ϊ��������������ִ�С�����ָ����� -e ѡ�����ִ�ж������
-		-h	��ʾ������ѡ���һ��������
-		-i [ ext]	���ļ�������дΪ���������ԭʼ�ļ��ᱻ������չ�� ext �������������δָ�� ext��ԭʼ�ļ��ᱻɾ����
-		-I dir	���� dir ��Ϊ���ؿ��Ŀ¼��
-		-K [ kcode]	ָ�����ֽ��ַ������롣e �� E ��Ӧ EUC��extended Unix code����s �� S ��Ӧ SJIS��Shift-JIS����u �� U ��Ӧ UTF-8��a��A��n �� N ��Ӧ ASCII��
-		-l	�����Զ���β��������������ȡ��һ�����з������������׷��һ�����з���
-		-n	�Ѵ��������һ������ѭ���У������� while gets; ... end ��һ������
-		-0[ octal]	����Ĭ�ϵļ�¼�ָ�����$/��Ϊ�˽��ơ����δָ�� octal ��Ĭ��Ϊ \0��
-		-p	�Ѵ��������һ������ѭ���С���ÿ�ε������������ $_ ��ֵ��
-		-r lib	ʹ�� require ������ lib ��Ϊִ��ǰ�Ŀ⡣
-		-s	����������ƺ��ļ�������֮���ƥ��ģʽ -xxx ���κβ�����Ϊ���أ���������Ӧ�ı�����
-		-T [level]	���ð�ȫ����ִ�в����Ȳ��ԣ����δָ�� level����Ĭ��ֵΪ 1����
-		-v	��ʾ�汾������������ģʽ��
-		-w	��������ģʽ�����δָ�������ļ������ STDIN ��ȡ��
-		-x [dir]	ɾ�� #!ruby ��֮ǰ���ı������ָ���� dir�����Ŀ¼�ı�Ϊ dir��
-		-X dir	��ִ��ǰ�ı�Ŀ¼���ȼ��� -C����
-		-y	���ý���������ģʽ��
-		--copyright	��ʾ��Ȩ������
-		--debug	���õ���ģʽ���ȼ��� -d����
-		--help	��ʾ������ѡ���һ���������ȼ��� -h����
-		--version	��ʾ�汾��
-		--verbose	��������ģʽ���ȼ��� -v�������� $VERBOSE Ϊ true��
-		--yydebug	���ý���������ģʽ���ȼ��� -y����
-2 �����﷨
-	Ruby �ѷֺźͻ��з�����Ϊ���Ľ�β,����β�����������б�ܣ���ʾһ������������
-	Ruby ��ʶ���Ǵ�Сд���еġ�
-	������:
+	中文编码:在文件开头加入 # -*- coding: UTF-8 -*-（EMAC写法） 或者 #coding=utf-8 就行了。
+	命令行选项:
+		-a	与 -n 或 -p 一起使用时，可以打开自动拆分模式(auto split mode)。请查看 -n 和 -p 选项。
+		-c	只检查语法，不执行程序。
+		-C dir	在执行前改变目录（等价于 -X）。
+		-d	启用调试模式（等价于 -debug）。
+		-F pat	指定 pat 作为默认的分离模式（$;）。
+		-e prog	指定 prog 作为程序在命令行中执行。可以指定多个 -e 选项，用来执行多个程序。
+		-h	显示命令行选项的一个概览。
+		-i [ ext]	把文件内容重写为程序输出。原始文件会被加上扩展名 ext 保存下来。如果未指定 ext，原始文件会被删除。
+		-I dir	添加 dir 作为加载库的目录。
+		-K [ kcode]	指定多字节字符集编码。e 或 E 对应 EUC（extended Unix code），s 或 S 对应 SJIS（Shift-JIS），u 或 U 对应 UTF-8，a、A、n 或 N 对应 ASCII。
+		-l	启用自动行尾处理。从输入行取消一个换行符，并向输出行追加一个换行符。
+		-n	把代码放置在一个输入循环中（就像在 while gets; ... end 中一样）。
+		-0[ octal]	设置默认的记录分隔符（$/）为八进制。如果未指定 octal 则默认为 \0。
+		-p	把代码放置在一个输入循环中。在每次迭代后输出变量 $_ 的值。
+		-r lib	使用 require 来加载 lib 作为执行前的库。
+		-s	解读程序名称和文件名参数之间的匹配模式 -xxx 的任何参数作为开关，并定义相应的变量。
+		-T [level]	设置安全级别，执行不纯度测试（如果未指定 level，则默认值为 1）。
+		-v	显示版本，并启用冗余模式。
+		-w	启用冗余模式。如果未指定程序文件，则从 STDIN 读取。
+		-x [dir]	删除 #!ruby 行之前的文本。如果指定了 dir，则把目录改变为 dir。
+		-X dir	在执行前改变目录（等价于 -C）。
+		-y	启用解析器调试模式。
+		--copyright	显示版权声明。
+		--debug	启用调试模式（等价于 -d）。
+		--help	显示命令行选项的一个概览（等价于 -h）。
+		--version	显示版本。
+		--verbose	启用冗余模式（等价于 -v）。设置 $VERBOSE 为 true。
+		--yydebug	启用解析器调试模式（等价于 -y）。
+2 基础语法
+	Ruby 把分号和换行符解释为语句的结尾,在行尾遇到运算符或反斜杠，表示一个语句的延续。
+	Ruby 标识符是大小写敏感的。
+	保留字:
 		BEGIN		do			next		then
 		END			else		nil			true
 		alias		elsif		not			undef
@@ -46,54 +46,54 @@
 		defined?	module		super		__LINE__
 	Here Document:
 		print <<EOF
-			���ǵ�һ�ַ�ʽ����here document ��
-			�����ַ�����
+			这是第一种方式创建here document 。
+			多行字符串。
 		EOF
 
-		print <<"EOF";                # ��������ͬ
-			���ǵڶ��ַ�ʽ����here document ��
-			�����ַ�����
+		print <<"EOF";                # 与上面相同
+			这是第二种方式创建here document 。
+			多行字符串。
 		EOF
 
-		print <<`EOC`                 # ִ������
+		print <<`EOC`                 # 执行命令
 			echo hi there
 			echo lo there
 		EOC
 
-		print <<"foo", <<"bar"	      # �����԰����ǽ��жѵ�
+		print <<"foo", <<"bar"	      # 您可以把它们进行堆叠
 			I said foo.
 		foo
 			I said bar.
 		bar
-	BEGIN ���:���� code �ڳ�������֮ǰ�����á�
+	BEGIN 语句:声明 code 在程序运行之前被调用。
 		BEGIN {
 		   code
 		}
-	END ���:���� code �ڳ���Ľ�β�����á�
+	END 语句:声明 code 在程序的结尾被调用。
 		END {
 			   code
 			}
-	ע��:
-		#	����ע��
-		����ע��
+	注释:
+		#	单行注释
+		多行注释
 			=begin
 			code...
 			=end	
-3 ��������
-	3.1 ��ֵ����(Number)
-		123                  # Fixnum ʮ����
-		1_234                # Fixnum �����»��ߵ�ʮ����
-		-500                 # ���� Fixnum
-		0377                 # �˽���
-		0xff                 # ʮ������
-		0b1011               # ������
-		"a".ord              # "a" ���ַ�����
-		?\n                  # ���з���0x0a���ı���
+3 数据类型
+	3.1 数值类型(Number)
+		123                  # Fixnum 十进制
+		1_234                # Fixnum 带有下划线的十进制
+		-500                 # 负的 Fixnum
+		0377                 # 八进制
+		0xff                 # 十六进制
+		0b1011               # 二进制
+		"a".ord              # "a" 的字符编码
+		?\n                  # 换行符（0x0a）的编码
 		12345678901234567890 # Bignum
-		123.4                # ����ֵ
-		1.0e6                # ��ѧ������
-		4E20                 # ���Ǳ����
-		4e+20                # ָ��ǰ�ķ���
+		123.4                # 浮点值
+		1.0e6                # 科学记数法
+		4E20                 # 不是必需的
+		4e+20                # 指数前的符号
 	3.2  
 	
 	
