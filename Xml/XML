@@ -3,6 +3,7 @@ XML (eXtensible Markup Language.可扩展标记语言)
 W3C : https://www.w3.org
 
 1,info
+    gml(1969)->sgml->(1985)->html(1993)->xml(1998)
     XML 被设计用来传输和存储数据(HTML 被设计用来显示数据)。
 2,XML文档结构：
     2.1,文档声明

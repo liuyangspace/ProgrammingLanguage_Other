@@ -27,10 +27,12 @@ SQL (Structured Query Language,结构化查询语言)
         index
         view
         constraint
+        transaction
     1.3,
         # SQL 对大小写不敏感
         # SQL 使用单引号来环绕文本值（大部分数据库系统也接受双引号）。
         # NULL 和 0 不等价的。
+        # sql脚本注释：--
 2,DDL
     database:
         SHOW DATABASES
@@ -40,56 +42,57 @@ SQL (Structured Query Language,结构化查询语言)
     table:
         SHOW TABLES
         DESC                    # 展现表结构
-        CREATE TABLE tableName ( columnName dataType [constraints, ...], ... [,CONSTRAINT constraints, ...] )
-        ALTER TABLE tableName ADD constraints
-        ALTER TABLE tableName ADD columnName dataType
-        ALTER TABLE tableName DROP COLUMN columnName
-        ALTER TABLE tableName ALTER COLUMN columnName dataType
-        TRUNCATE TABLE tableName        #清空表
-        DROP TABLE tableName
+        CREATE TABLE table_name ( columnName dataType [constraints, ...], ... [,CONSTRAINT constraints, ...] )
+        ALTER TABLE table_name ADD constraints
+        ALTER TABLE table_name ADD column_name dataType
+        ALTER TABLE table_name DROP COLUMN column_name
+        ALTER TABLE table_name ALTER COLUMN column_name dataType
+        TRUNCATE TABLE table_name        #清空表
+        DROP TABLE table_name
         # MySQL
-        ALTER TABLE tableName ALTER columnName SET DEFAULT 'defaultValue'
-        ALTER TABLE tableName ALTER columnName DROP DEFAULT
+        ALTER TABLE table_name ALTER column_name SET DEFAULT 'defaultValue'
+        ALTER TABLE table_name ALTER column_name DROP DEFAULT
         # SQL Server / Oracle / MS Access
-        ALTER TABLE tableName ALTER COLUMN columnName SET DEFAULT 'defaultValue'
-        ALTER TABLE tableName ALTER COLUMN columnName DROP DEFAULT
+        ALTER TABLE table_name ALTER COLUMN column_name SET DEFAULT 'defaultValue'
+        ALTER TABLE table_name ALTER COLUMN column_name DROP DEFAULT
     index:
-        CREATE [UNIQUE] INDEX indexName ON tableName (columnName1,columnName2)
-        ALTER TABLE tableName ADD （UNIQUE|PRIMARY KEY) uniqueIndexName
-        ALTER TABLE tableName1 ADD [CONSTRAINT foreignKeyName] FOREIGN KEY (columnName1) REFERENCES tableName2(columnName2)
-        ALTER TABLE tableName ADD [CONSTRAINT checkKeyName] CHECK ( check1 AND check2)
-        ALTER TABLE tableName DROP INDEX uniqueIndexName
+        CREATE [UNIQUE] INDEX index_name ON table_name (column_name1,column_name2)
+        ALTER TABLE table_name ADD （UNIQUE|PRIMARY KEY) unique_index_name
+        ALTER TABLE table_name1 ADD [CONSTRAINT foreign_key_name] FOREIGN KEY (column_name1) REFERENCES table_name2(column_name2)
+        ALTER TABLE table_name ADD [CONSTRAINT check_key_name] CHECK ( check1 AND check2)
+        ALTER TABLE table_name DROP INDEX unique_index_name
         # MySQL
-        ALTER TABLE tableName DROP (PRIMARY KEY|FOREIGN KEY|CHECK) keyName
-        ALTER TABLE tableName DROP INDEX indexName
+        SHOW INDEX FROM table_name
+        ALTER TABLE table_name DROP (PRIMARY KEY|FOREIGN KEY|CHECK) key_name
+        ALTER TABLE table_name DROP INDEX index_name
         # MS SQL Server
-        DROP INDEX tableName.indexName
+        DROP INDEX table_name.index_name
         # SQL Server / Oracle / MS Access:
-        ALTER TABLE tableName DROP CONSTRAINT keyName
+        ALTER TABLE table_name DROP CONSTRAINT key_name
         # Microsoft SQLJet / Microsoft Access
-        DROP INDEX indexName ON tableName
+        DROP INDEX index_name ON table_name
         # IBM DB2 和 Oracle
-        DROP INDEX indexName
+        DROP INDEX index_name
     view:
-        CREATE VIEW viewName AS selectClause
-        SELECT * FROM viewName
-        DROP VIEW viewName
+        CREATE VIEW view_name AS selectClause
+        SELECT * FROM view_name
+        DROP VIEW view_name
     约束constraints
         NOT NULL            不接受 NULL 值
         UNIQUE              唯一索引,标识数据库表中的每条记录。
-                                多个列：CONSTRAINT uniqueIndexName UNIQUE (columnName1,columnName2,...)
+                                多个列：CONSTRAINT unique_index_name UNIQUE (column_name1,column_name2,...)
         PRIMARY KEY         主键,唯一,非NULL,每个表有且只有一个
-                                多个列：CONSTRAINT primaryKeyName PRIMARY KEY (columnName1,columnName2,...)
+                                多个列：CONSTRAINT primaryKeyName PRIMARY KEY (column_name1,column_name2,...)
         FOREIGN KEY         外键，一个表中的 FOREIGN KEY 指向另一个表中的 PRIMARY KEY。
         CHECK ()            限制列中的值的范围(CHECK (id>0),)
         DEFAULT             向列中插入默认值。
         AUTO_INCREMENT      开始值是 1，每条新记录递增 1。
 3,DQL
     SELECT:
-        SELECT [ DISTINCT ] (columnName, ...|*) FROM tableName, ... [ (WHERE whereClause)|(JOIN tableName ON whereClause) ]
-            [ ORDER BY orderColumnName (DESC|ASC), ...] [ GROUP BY columnName ] [ LIMIT startNumber,endNumber ] [ HAVING havingClause ]
-        # table.field   : columnName = [tableName.|tableAlias.]columnName
-        # Alias         : tableName = tableName[ AS tableAlias ]
+        SELECT [ DISTINCT ] (column_name, ...|*) FROM table_name, ... [ (WHERE whereClause)|(JOIN table_name ON whereClause) ]
+            [ ORDER BY ordercolumn_name (DESC|ASC), ...] [ GROUP BY column_name ] [ LIMIT startNumber,endNumber ] [ HAVING havingClause ]
+        # table.field   : column_name = [table_name.|table_alias.]column_name
+        # Alias         : table_name = table_name[ AS table_alias ]
     WHERE:
         操作符:
             =                           等于
@@ -126,17 +129,17 @@ SQL (Structured Query Language,结构化查询语言)
         UNION ALL   合并两个或多个 SELECT 语句的结果集,允许重复的值。
 4,DML
     INSERT:
-        INSERT INTO tableName (columnName, ...) VALUES (fieldValue, ,....)
-        SELECT (columnName, ...|*) INTO newTableName [ IN externalDatabase ] FROM oldTableName [ (WHERE whereClause)|(JOIN tableName ON whereClause) ]
+        INSERT INTO table_name (column_name, ...) VALUES (fieldValue, ,....)
+        SELECT (column_name, ...|*) INTO new_table_name [ IN externalDatabase ] FROM old_table_name [ (WHERE whereClause)|(JOIN table_name ON whereClause) ]
     UPDATE
-        UPDATE tableName SET columnName=fieldValue, ... WHERE whereClause
+        UPDATE table_name SET column_name=fieldValue, ... WHERE whereClause
     DELETE
-        DELETE [ * ] FROM tableName [ WHERE whereClause ]
+        DELETE [ * ] FROM table_name [ WHERE whereClause ]
 5,DCL
     GRANT:
-        GRANT [INSERT|SELECT|UPDATE|DELETE|ALL] ON databaseName.tableName TO 'userName'@'hostName' IDENTIFIED BY 'password'  # 授权
+        GRANT [INSERT|SELECT|UPDATE|DELETE|ALL] ON databaseName.table_name TO 'userName'@'hostName' IDENTIFIED BY 'password'  # 授权
     REVOKE:
-        REVOKE [INSERT|SELECT|UPDATE|DELETE|ALL] ON databaseName.tableName TO 'userName'@'hostName'  # 回收权限
+        REVOKE [INSERT|SELECT|UPDATE|DELETE|ALL] ON databaseName.table_name TO 'userName'@'hostName'  # 回收权限
     USER:
         CREATE USER 'userName'@'hostName' [ IDENTIFIED BY 'password' ]  # 创建用户
         DROP USER 'userName'@'hostName'                                 # 删除用户
@@ -193,20 +196,20 @@ SQL (Structured Query Language,结构化查询语言)
         SMALLDATETIME       格式: YYYY-MM-DD HH:MM:SS
         TIMESTAMP           格式: 唯一的数字
 7,常用函数
-        AVG( columnName )                               平均值。
-        COUNT( [DISTINCT] (columnName|*) )              统计。
-        FIRST( columnName )                             第一个记录的值。
-        LAST( columnName )                              最后一个记录的值。
-        MAX( columnName )                               最大值。
-        MIN( columnName )                               最小值。
-        SUM( columnName )                               总数。
-        UCASE( columnName )                             把字段的值转换为大写。
-        LCASE( columnName )                             把字段的值转换为小写。
-        MID( columnName ,start [,length] )              从文本字段中提取字符。
-        LEN( columnName )                               返回文本字段中值的长度。
-        ROUND( columnName ,decimals )                   把数值字段舍入为指定的小数位数。
-        FORMAT( columnName ,format )                    对字段的显示进行格式化。
-        GROUP BY columnName                             分组。
+        AVG( column_name )                               平均值。
+        COUNT( [DISTINCT] (column_name|*) )              统计。
+        FIRST( column_name )                             第一个记录的值。
+        LAST( column_name )                              最后一个记录的值。
+        MAX( column_name )                               最大值。
+        MIN( column_name )                               最小值。
+        SUM( column_name )                               总数。
+        UCASE( column_name )                             把字段的值转换为大写。
+        LCASE( column_name )                             把字段的值转换为小写。
+        MID( column_name ,start [,length] )              从文本字段中提取字符。
+        LEN( column_name )                               返回文本字段中值的长度。
+        ROUND( column_name ,decimals )                   把数值字段舍入为指定的小数位数。
+        FORMAT( column_name ,format )                    对字段的显示进行格式化。
+        GROUP BY column_name                             分组。
         HAVING havingClause                             替代 WHERE 关键字 与合计函数一起使用。
     # MySQL Date 函数
         # 日期/时间
@@ -226,6 +229,7 @@ SQL (Structured Query Language,结构化查询语言)
         DATEADD()                                       在日期中添加或减去指定的时间间隔
         DATEDIFF()                                      返回两个日期之间的时间
         CONVERT()                                       用不同的格式显示日期/时间
+
 *.
     SQL     ISO (1987) and ANSI (1986) standard for the SQL.
     T-SQL   即 Transact-SQL，是 SQL 在 Microsoft SQL Server 上的增强版。
